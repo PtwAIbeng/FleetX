@@ -68,16 +68,35 @@
     <Folder Include="Vehicle\Schemas" />
     <Folder Include="Vehicle\Stored Procedures" />
     <Folder Include="Vehicle\Tables" />
+    <Folder Include="Trip\Schemas" />
+    <Folder Include="Trip\Stored Procedures" />
+    <Folder Include="Trip\Tables" />
+    <Folder Include="FuelTracking\Schemas" />
+    <Folder Include="FuelTracking\Stored Procedures" />
+    <Folder Include="FuelTracking\Tables" />
+    <Folder Include="Notification\Schemas" />
+    <Folder Include="Notification\Stored_Procedures" />
+    <Folder Include="Notification\Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Driver\Schemas\Driver.sql" />
     <Build Include="Driver\Tables\Driver.sql" />
     <Build Include="Vehicle\Schemas\Vehicle.sql" />
     <Build Include="Vehicle\Tables\Vehicle.sql" />
-    <Build Include="Driver\Stored Procedures\Vehicle_Create.sql" />
-    <Build Include="Driver\Stored Procedures\Vehicle_Delete.sql" />
-    <Build Include="Driver\Stored Procedures\Vehicle_Update.sql" />
-    <Build Include="Driver\Stored Procedures\Vehicle_Read.sql" />
+    <Build Include="Trip\Schemas\Trip.sql" />
+    <Build Include="Trip\Tables\Trip.sql" />
+    <Build Include="Vehicle\Stored Procedures\Vehicle_Create.sql" />
+    <Build Include="Vehicle\Stored Procedures\Vehicle_Delete.sql" />
+    <Build Include="Vehicle\Stored Procedures\Vehicle_Read.sql" />
+    <Build Include="Vehicle\Stored Procedures\Vehicle_Update.sql" />
+    <Build Include="Driver\Stored Procedures\Driver_Create.sql" />
+    <Build Include="Driver\Stored Procedures\Driver_Read.sql" />
+    <Build Include="Driver\Stored Procedures\Driver_Delete.sql" />
+    <Build Include="Driver\Stored Procedures\Driver_Update.sql" />
+    <Build Include="FuelTracking\Schemas\FuelTracking.sql" />
+    <Build Include="FuelTracking\Tables\FuelTracking.sql" />
+    <Build Include="Notification\Schemas\Notification.sql" />
+    <Build Include="Notification\Tables\Notification.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

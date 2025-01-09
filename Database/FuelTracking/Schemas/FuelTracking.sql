@@ -1,0 +1,2 @@
+﻿CREATE SCHEMA [FuelTracking]
+	AUTHORIZATION [dbo];
