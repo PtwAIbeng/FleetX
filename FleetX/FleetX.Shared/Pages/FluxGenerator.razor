@@ -1,0 +1,126 @@
+﻿@page "/flux"
+@using System.Text.Json
+@using System.Net.Http.Headers
+@using System.Text
+
+<div class="container py-5">
+    <h1 class="text-center mb-5">AI Image Generator</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card custom-shadow">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <label for="prompt" class="form-label">Describe the image you want to generate:</label>
+                        <textarea class="form-control" id="prompt" rows="3" @bind="prompt" placeholder="E.g.: A cat astronaut floating in space with Earth in the background"></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-lg" type="button" id="generateBtn" @onclick="GenerateImage" disabled="@isLoading">Generate Image</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-4 custom-shadow">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Generated Image</h5>
+                    <div class="text-center">
+                        @if (isLoading)
+                        {
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        }
+                        else if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            <div class="flex-center">
+                                <div class="card">
+                                    <img src="@imageUrl" class="card-img-top" alt="Generated Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Used prompt:</h5>
+                                        <hr />
+                                        <p>@prompt</p>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-between">
+                                        <button class="btn btn-outline-primary">Like</button>
+                                        <button class="btn btn-outline-secondary">Share</button>
+                                        <button class="btn btn-outline-success">Read More</button>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-between">
+                                        <span>Created by @@hprez</span>
+                                        <span>@DateTime.Now.ToShortDateString()</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>No image generated yet.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string prompt = "";
+    private string imageUrl = "";
+    private bool isLoading = false;
+    private async Task GenerateImage()
+    {
+        isLoading = true;
+        var apiKey = "acae0895e4096e2c201423513f3c49c28acdcf67360d94bb3e3fc929e3748770"; // Replace with your actual API key
+        var apiUrl = "https://api.together.xyz/v1/images/generations";
+        var client = new HttpClient();
+
+        var requestData = new
+        {
+            model = "black-forest-labs/FLUX.1-schnell",
+            prompt = prompt,
+            width = 1024,
+            height = 768,
+            steps = 4,
+            n = 1,
+            response_format = "b64_json"
+        };
+
+        var requestContent = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+
+        try
+        {
+            var response = await client.PostAsync(apiUrl, requestContent);
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var jsonResponse = JsonDocument.Parse(responseContent);
+                var base64Image = jsonResponse.RootElement.GetProperty("data")[0].GetProperty("b64_json").GetString();
+                imageUrl = $"data:image/png;base64,{base64Image}";
+            }
+            else
+            {
+                Console.WriteLine("Error generating image: " + response.ReasonPhrase);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception occurred: " + ex.Message);
+        }
+
+        isLoading = false;
+    }
+}
+
+<style>
+    .justify-space-between {
+        justify-content: space-between;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .custom-shadow {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
